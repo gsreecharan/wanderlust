@@ -64,12 +64,21 @@ module.exports.renderEditForm = async (req , res) => {
 module.exports.updateListing = async (req , res) => {
     let {id} = req.params;
     let listing = await Listing.findByIdAndUpdate(id , {...req.body.listing});
+    
+    let response = await geocodingClient.forwardGeocode({
+        query: req.body.listing.location,
+        limit: 1,
+    }).send();
+    listing.geometry = response.body.features[0].geometry;
+    
     if (typeof req.file !== "undefined") {
         let url = req.file.path;
         let filename = req.file.filename;
         listing.image = { url, filename};
         await listing.save();
     }
+
+    await listing.save();
     req.flash("success" , "listing updated")
     res.redirect(`/listings/${id}`);
 };
@@ -81,3 +90,15 @@ module.exports.destroyListing = async (req , res) => {
     req.flash("success" , "Listing deleted");
     res.redirect("/listings");
 }
+
+module.exports.search = async (req, res) => {
+    let { q } = req.query;
+    // Search database case-insensitively for the location
+    const allListings = await Listing.find({ location: new RegExp(q, 'i') });
+    
+    if(allListings.length === 0) {
+        req.flash("error", "No listings found for that destination.");
+        return res.redirect("/listings");
+    }
+    res.render("listings/index.ejs", { allListings });
+};
