@@ -6,33 +6,32 @@
 <h3>Create a new Listing</h3>
     <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data"> 
         <div class="mb-3">
-        <lable for="title" class="form-label">Title</lable>
+        <label for="title" class="form-label">Title</label>
         <input name="listing[title]" placeholder = "Add A Catchy title" type="text" class="form-control" required>
         <div class="valid-feedback">Title Looks Good</div>
         </div>
 
         <div class="mb-3">
-            <lable for="description" class="form-label">Description</lable>
+            <label for="description" class="form-label">Description</label>
             <textarea name="listing[description]" type="text" class="form-control" required></textarea>
             <div class="invalid-feedback">Please enter a valid description</div>
         </div>
 
         <div class="mb-3">
-            <lable for="image" class="form-label">Upload Listining Image </lable>
-            <input name="listing[image]" placeholder = " URL/link" type="file" class="form-control">
-            required
+            <label for="image" class="form-label">Upload Listining Image </label>
+            <input name="listing[image]" placeholder = " URL/link" type="file" class="form-control" required>
         </div>
 
         <div class="row">
             
             <div class="mb-3 col-md-4">
-                <lable for="price" class="form-label">Price</lable>
+                <label for="price" class="form-label">Price</label>
                 <input name="listing[price]" placeholder = 8300 class="form-control" required>
                 <div class="invalid-feedback">Please enter a valid number</div>
             </div>
         
             <div class="mb-3 col-md-8">
-                <lable for="country" class="form-label">Country</lable>
+                <label for="country" class="form-label">Country</label>
                 <input name="listing[country]" placeholder = "India" type="text" class="form-control" required>
                 <div class="invalid-feedback">Please enter a valid location</div>
             </div>
@@ -40,7 +39,7 @@
         </div>
 
         <div class="mb-3">
-            <lable for="location" class="form-label">Location</lable>
+            <label for="location" class="form-label">Location</label>
             <input name="listing[location]" placeholder = "New Delhi" type="text" class="form-control" required>
             <div class="invalid-feedback">Please enter a valid number</div>
         </div>
