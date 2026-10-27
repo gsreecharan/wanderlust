@@ -119,8 +119,16 @@ body {
 
 /* show page */
 
-.show-img{
-    height: 30vh;
+.show-img {
+  height: 30vh;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
+.show-img:hover {
+  opacity: 1 !important;
+  transform: none !important;
+  cursor: default;
 }
 
 .btns{
