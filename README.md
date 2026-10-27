@@ -60,3 +60,52 @@ Wanderlust replicates core marketplace functionalities for property rentals. It 
 ├── views/              # EJS templates (listings, reviews, layouts)
 ├── app.js              # Main application entry point
 └── package.json        # Project metadata and dependencies
+
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16 or higher)
+- MongoDB (Local instance or MongoDB Atlas URI)
+
+### Installation & Setup
+
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/gsreecharan/wanderlust.git](https://github.com/gsreecharan/wanderlust.git)
+   cd wanderlust
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure environment variables:
+   Create a `.env` file in the root directory and securely add the following keys:
+   ```env
+   CLOUD_NAME=your_cloudinary_cloud_name
+   CLOUD_API_KEY=your_cloudinary_api_key
+   CLOUD_API_SECRET=your_cloudinary_api_secret
+   MAP_TOKEN=your_mapbox_public_token
+   ATLASDB_URL=your_mongodb_atlas_connection_string
+   SECRET=your_session_secret
+   ```
+
+4. Seed the database (Optional):
+   ```bash
+   node init/index.js
+   ```
+
+5. Start the development server:
+   ```bash
+   node app.js
+   ```
+
+---
+
+## Author
+
+- **G. Sree Charan** — [GitHub](https://github.com/gsreecharan)
