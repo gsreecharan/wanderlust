@@ -74,7 +74,7 @@ Wanderlust replicates core marketplace functionalities for property rentals. It 
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/gsreecharan/wanderlust.git](https://github.com/gsreecharan/wanderlust.git)
+   git clone https://github.com/gsreecharan/wanderlust.git
    cd wanderlust
    ```
 
