@@ -36,7 +36,7 @@ module.exports.login = async (req, res) => {
 // CHANGE: One-click Demo Recruiter Login (auto-creates demo account if not in DB yet)
 module.exports.demoLogin = async (req, res, next) => {
     try {
-        let demoUser = await User.findOne({ username: "demo_recruiter" });
+        let demoUser = await User.findOne({ username: "demo_guest" });
         if (!demoUser) {
             const newDemo = new User({
                 username: "demo_recruiter",
@@ -50,7 +50,7 @@ module.exports.demoLogin = async (req, res, next) => {
             }
             req.flash(
                 "success",
-                "Logged in as @demo_recruiter! Try creating a listing, editing your post, or leaving a review."
+                "Logged in as demo_guest! Try creating a listing, editing your post, or leaving a review."
             );
             let redirectUrl = res.locals.redirectUrl || "/listings";
             return res.redirect(redirectUrl);
