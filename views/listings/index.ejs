@@ -1,153 +1,216 @@
 <% layout("/layouts/boilerplate") %>
 
-<!-- <h3>All Listings</h3> -->
-
 <style>
-  #filters{
-    /* margin-top: 1rem; */
+  /* CHANGE: Fixed invalid `flex: wrap` -> proper horizontal scrolling row with clean spacing */
+  #filters {
     display: flex;
-    flex: wrap;
+    flex-wrap: nowrap;
     align-items: center;
+    gap: 1.75rem;
+    overflow-x: auto;
+    padding: 1rem 0 0.75rem 0;
+    scrollbar-width: none;
   }
 
-  .filter{
-    text-align: center;
-    margin-right: 2rem;
-    margin-top: 2rem;
-    opacity: 0.7;
-  }
-
-  .filter:hover{
-    opacity: 1;
-    cursor: pointer;
-  }
-
-  .filter p{
-    font-size: 0.8 rem;
-    
-  }
-
-  .tax-info{
+  #filters::-webkit-scrollbar {
     display: none;
   }
 
-  .tax-toggle{
-    border: 1px solid black;
-    border-radius: 1.5rem;
-    height: 3.25rem;
-    padding: 1rem;
-    margin-left: 2rem;
-    display: flex;
-    align-items: center;
+  .filter {
+    text-align: center;
+    opacity: 0.65;
+    padding-bottom: 0.35rem;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: opacity 0.15s ease, border-color 0.15s ease;
   }
 
+  .filter:hover,
+  .filter.active-filter {
+    opacity: 1;
+    cursor: pointer;
+    border-bottom-color: #222222;
+  }
+
+  /* CHANGE: Fixed invalid CSS spacing `0.8 rem` -> `0.8rem` */
+  .filter p {
+    font-size: 0.8rem;
+    margin: 0.25rem 0 0 0;
+  }
+
+  .tax-info {
+    display: none;
+    color: #555;
+    font-size: 0.85rem;
+  }
+
+  .tax-toggle {
+    border: 1px solid #d4d4d4;
+    border-radius: 1rem;
+    height: 3rem;
+    padding: 0 1rem;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 </style>
 
+<!-- CHANGE: Made every category button a working filter using data-category -->
 <div id="filters">
-    <div class="filter">
+    <div class="filter active-filter" data-category="all">
         <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
+        <p>All Stays</p>
     </div>
 
-    <div class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
+    <div class="filter" data-category="beach">
+        <div><i class="fa-solid fa-umbrella-beach"></i></div>
+        <p>Beaches</p>
     </div>
 
-    <div class="filter">
+    <div class="filter" data-category="city">
         <div><i class="fa-solid fa-mountain-city"></i></div>
         <p>Cities</p>
     </div>
-    
-    <div class="filter">
+
+    <div class="filter" data-category="mountain">
         <div><i class="fa-solid fa-mountain"></i></div>
         <p>Mountains</p>
     </div>
 
-    <div class="filter">
+    <div class="filter" data-category="castle">
         <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
+        <p>Heritage</p>
     </div>
 
-    <div class="filter">
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Pools</p>
+    <!-- CHANGE: Fixed "Campaigns" + Mailchimp icon -> "Camping" + Campground icon -->
+    <div class="filter" data-category="camping">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
     </div>
 
-    <div class="filter">
-        <div><i class="fa-brands fa-mailchimp"></i></div>
-        <p>Campaigns</p>
-    </div>
-
-    <div class="filter">
+    <div class="filter" data-category="farm">
         <div><i class="fa-solid fa-cow"></i></div>
         <p>Farms</p>
     </div>
 
-    <div class="filter">
-        <div><i class="fa-solid fa-igloo"></i></div>
-        <p>Arctic</p>
-    </div>
-
-    <div class="filter">
-        <div><i class="fa-solid fa-person-shelter"></i></div>
-        <p>Caves</p>
-    </div>
-
-    <div class="filter">
+    <div class="filter" data-category="boat">
         <div><i class="fa-solid fa-sailboat"></i></div>
-        <p>Boats</p>
+        <p>Waterfront</p>
     </div>
 
     <div class="tax-toggle">
         <div class="form-check-reverse form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-            <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+            <label class="form-check-label small" for="switchCheckDefault">Display total after taxes</label>
         </div>
     </div>
-
 </div>
 
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-    <% for(let listing of allListings) { %>
-    <!-- 1. The Column container is the direct child of the row -->
-    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-        
-        <!-- 2. The Link sits safely inside the column -->
-        <a href="/listings/<%= listing._id %>" class="text-decoration-none">
+<!-- CHANGE: Show active search indicator with quick Clear button -->
+<% if (typeof searchQuery !== 'undefined' && searchQuery) { %>
+<div class="d-flex align-items-center justify-content-between bg-light rounded-3 px-3 py-2 mt-2 mb-3">
+    <span class="small text-secondary">
+        Showing <b><%= allListings.length %></b> stay(s) matching "<b><%= searchQuery %></b>"
+    </span>
+    <a href="/listings" class="btn btn-sm btn-outline-dark rounded-pill">Clear search</a>
+</div>
+<% } %>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3" id="listingsGrid">
+    <% for(let listing of allListings) {
+        const basePrice = listing.price || 0;
+        const taxPrice = Math.round(basePrice * 1.18);
+        const searchBlob = `${listing.title} ${listing.description} ${listing.location} ${listing.country}`.toLowerCase();
+    %>
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4 listing-col" data-text="<%= searchBlob %>">
+        <a href="/listings/<%= listing._id %>" class="listing-link text-decoration-none">
             <div class="card listing-card h-100" style="border: none;">
-                <img 
-                    src="<%= listing.image.url %>" 
-                    class="card-img-top" 
-                    alt="listing_image" 
+                <img
+                    src="<%= listing.image.url %>"
+                    class="card-img-top"
+                    alt="<%= listing.title %>"
                     style="height: 20rem; object-fit: cover; border-radius: 1rem;"
                 >
-                <div class="card-body px-0">
-                    <p class="card-text mb-2 text-dark">
-                        <b><%= listing.title %></b> <br/>
-                        &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "Not Available" %> / night
-                        <i class="tax-info"> &nbsp; + 18% GST </i>
+                <div class="card-body px-0 pt-2">
+                    <!-- CHANGE: Removed leftover Bootstrap "Go somewhere" button & added clean location + real GST price calculation -->
+                    <p class="card-text mb-1 text-dark">
+                        <b><%= listing.title %></b><br/>
+                        <span class="text-secondary small"><%= listing.location %>, <%= listing.country %></span><br/>
+                        <span class="base-price fw-semibold">
+                            &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "Not Available" %>
+                        </span>
+                        <span class="tax-info fw-semibold">
+                            &#8377; <%= listing.price ? taxPrice.toLocaleString("en-IN") : "Not Available" %>
+                        </span>
+                        <span class="text-secondary small"> / night</span>
+                        <i class="tax-info"> (incl. 18% GST)</i>
                     </p>
-                    <span class="btn btn-primary">Go somewhere</span>
                 </div>
             </div>
         </a>
-
     </div>
     <% } %>
 </div>
 
+<!-- CHANGE: Clean empty state when a category filter matches zero stays -->
+<div id="noCategoryMatch" class="text-center py-5 d-none">
+    <p class="text-secondary mb-2">No stays match this category right now.</p>
+    <button class="btn btn-outline-dark btn-sm rounded-pill" id="resetFilterBtn">Show all stays</button>
+</div>
+
 <script>
-    let taxSwitch = document.getElementById("switchCheckDefault");
-    taxSwitch.addEventListener("click" , ()=> {
-        let taxInfo = document.getElementsByClassName("tax-info");
-        // console.log(taxInfo);
-        for(info of taxInfo){
-            if(info.style.display != "inline"){
-                info.style.display = "inline";
-            }else{
-                info.style.display = "none";
-            }
-        }
+    // CHANGE: Tax switch swaps cleanly between base price and real 18%-GST inclusive price
+    const taxSwitch = document.getElementById("switchCheckDefault");
+    taxSwitch.addEventListener("change", () => {
+        const basePrices = document.querySelectorAll(".base-price");
+        const taxInfos = document.querySelectorAll(".tax-info");
+        basePrices.forEach((el) => {
+            el.style.display = taxSwitch.checked ? "none" : "inline";
+        });
+        taxInfos.forEach((el) => {
+            el.style.display = taxSwitch.checked ? "inline" : "none";
+        });
     });
+
+    // CHANGE: Working client-side category filter across existing MongoDB listings
+    const categoryKeywords = {
+        all: [],
+        beach: ["beach", "ocean", "sea", "island", "surf", "goa", "varkala", "andaman", "gokarna"],
+        city: ["city", "urban", "loft", "penthouse", "studio", "bangalore", "mumbai", "delhi", "pondicherry"],
+        mountain: ["mountain", "snow", "himalayan", "ski", "hill", "altitude", "manali", "shimla", "leh", "auli", "munnar", "darjeeling"],
+        castle: ["castle", "haveli", "heritage", "royal", "colonial", "boulder", "jaipur", "udaipur", "hampi"],
+        camping: ["camp", "tent", "desert", "jungle", "treehouse", "jaisalmer", "rishikesh", "coorg"],
+        farm: ["farm", "orchard", "tea", "estate", "cottage"],
+        boat: ["boat", "houseboat", "lake", "river", "backwater", "alleppey", "srinagar", "varanasi"],
+    };
+
+    const filterButtons = document.querySelectorAll(".filter");
+    const listingCols = document.querySelectorAll(".listing-col");
+    const emptyState = document.getElementById("noCategoryMatch");
+
+    function applyFilter(category) {
+        filterButtons.forEach((btn) => {
+            btn.classList.toggle("active-filter", btn.dataset.category === category);
+        });
+
+        const keywords = categoryKeywords[category] || [];
+        let visibleCount = 0;
+
+        listingCols.forEach((col) => {
+            const text = col.dataset.text || "";
+            const matches = category === "all" || keywords.some((kw) => text.includes(kw));
+            col.style.display = matches ? "" : "none";
+            if (matches) visibleCount++;
+        });
+
+        emptyState.classList.toggle("d-none", visibleCount > 0);
+    }
+
+    filterButtons.forEach((btn) => {
+        btn.addEventListener("click", () => applyFilter(btn.dataset.category));
+    });
+
+    document.getElementById("resetFilterBtn")?.addEventListener("click", () => applyFilter("all"));
 </script>

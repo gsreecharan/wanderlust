@@ -1,14 +1,49 @@
-<footer>
+<footer class="mt-5">
     <div class="f-info">
+        <!-- CHANGE: Replaced dead icons with clickable GitHub & LinkedIn links -->
         <div class="f-info-socials">
-            <i class="fa-brands fa-square-facebook"></i>
-            <i class="fa-brands fa-square-instagram"></i>
-            <i class="fa-brands fa-square-linkedin"></i>
+            <a href="https://github.com/gsreecharan/wanderlust" target="_blank" rel="noreferrer" class="text-dark" title="GitHub Repository">
+                <i class="fa-brands fa-square-github"></i>
+            </a>
+            <a href="https://linkedin.com/in/gsreecharan" target="_blank" rel="noreferrer" class="text-dark" title="LinkedIn Profile">
+                <i class="fa-brands fa-square-linkedin"></i>
+            </a>
         </div>
-        <div class="f-info-brand"> &copy; Wanderlust Private Limited</div>
-        <div class="f-info-links">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
+        <div class="f-info-brand">&copy; Wanderlust — Built by Ganjai Sree Charan</div>
+        <!-- CHANGE: Replaced dead 404 /privacy & /terms routes with working modals -->
+        <div class="f-info-links gap-3">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms</a>
         </div>
     </div>
 </footer>
+
+<!-- CHANGE: Privacy Modal (eliminates 404 on click) -->
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Privacy Policy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-secondary small">
+                Wanderlust is a portfolio demonstration project. User credentials are salted and hashed with Passport.js and stored in MongoDB Atlas. Please avoid entering sensitive personal data.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CHANGE: Terms Modal (eliminates 404 on click) -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms of Use</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-secondary small">
+                All stays listed on Wanderlust are sample properties for testing full-stack CRUD, authentication, Cloudinary uploads, and Mapbox geocoding. No real bookings or payments are processed.
+            </div>
+        </div>
+    </div>
+</div>

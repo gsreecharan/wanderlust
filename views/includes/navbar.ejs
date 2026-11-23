@@ -1,66 +1,79 @@
 <style>
-  .search-btn{
+  .search-btn {
     background-color: #fe424d;
     color: #fff;
     border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+    padding: 0 1.1rem;
     margin-left: 0.5rem;
+    white-space: nowrap;
   }
 
-  .search-btn:hover{
-    background-color: #fe424d;
+  .search-btn:hover {
+    background-color: #e0313d;
     color: #fff;
   }
 
-  .search-btn i{
+  .search-btn i {
     display: inline;
     margin-right: 0.5rem;
   }
 
-  /* .navbar-nav{
+  .form-inline {
     display: flex;
-  } */
+  }
 
-   .form-inline{
-    display: flex;
-   }
-
-   .search-inp{
+  .search-inp {
     border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 1rem;
-   }
+    padding: 0.5rem 1.5rem;
+    font-size: 0.95rem;
+  }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/listings">
+      <i class="fa-solid fa-compass"></i>
+      <!-- CHANGE: Added brand text next to compass icon -->
+      <span class="fw-bold" style="color: #fe424d;">Wanderlust</span>
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="collapse navbar-collapse bg-white py-2 py-md-0" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <!-- <a class="nav-link" href="/">Home</a> -->
         <a class="nav-link" href="/listings">Explore</a>
       </div>
 
-      <div class="navbar-nav ms-auto" >
+      <div class="navbar-nav ms-auto my-2 my-md-0">
         <form class="form-inline" method="GET" action="/listings/search">
-          <input name="q" class="form-control mr-sm-2 search-inp" type="search" placeholder="Search Destinations" required>
-          <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+          <!-- CHANGE: Pre-fill search bar with active searchQuery -->
+          <input
+            name="q"
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+            class="form-control search-inp"
+            type="search"
+            placeholder="Search city, title, country..."
+            required
+          >
+          <button class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>Search
+          </button>
         </form>
       </div>
 
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/listings/new">Airbnb your home</a>
+      <div class="navbar-nav ms-auto align-items-md-center">
+        <!-- CHANGE: Renamed "Airbnb your home" to "List your stay" -->
+        <a class="nav-link" href="/listings/new">List your stay</a>
         <% if(!currUser) { %>
-        <a class="nav-link" href="/signup"><b>Signup</b></a>
-        <a class="nav-link" href="/login"><b>Login</b></a>
-        <% } %> <% if(currUser) { %>
-        <a class="nav-link" href="/logout"><b>Log out</b></a>
+          <a class="nav-link" href="/signup"><b>Sign up</b></a>
+          <a class="nav-link" href="/login"><b>Log in</b></a>
+        <% } %>
+        <% if(currUser) { %>
+          <!-- CHANGE: Display logged-in user badge -->
+          <span class="nav-link text-muted small">@<%= currUser.username %></span>
+          <a class="nav-link" href="/logout"><b>Log out</b></a>
         <% } %>
       </div>
-
     </div>
   </div>
 </nav>
