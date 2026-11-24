@@ -33,7 +33,7 @@ module.exports.login = async (req, res) => {
     res.redirect(redirectUrl);
 };
 
-// CHANGE: One-click Demo Recruiter Login (auto-creates demo account if not in DB yet)
+// CHANGE: One-click Demo Login (auto-creates demo account if not in DB yet)
 module.exports.demoLogin = async (req, res, next) => {
     try {
         let demoUser = await User.findOne({ username: "demo_guest" });

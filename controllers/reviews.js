@@ -20,7 +20,7 @@ module.exports.createReview = async (req, res) => {
 
 module.exports.destroyReview = async (req, res) => {
     let { id, reviewId } = req.params;
-    // CHANGE: Removed redundant Review.findById and fixed flash message from "review created" -> "Review deleted."
+    // CHANGE: Removed redundant Review.findById and fixed flash message
     await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
 
