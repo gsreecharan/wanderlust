@@ -33,31 +33,41 @@ module.exports.login = async (req, res) => {
     res.redirect(redirectUrl);
 };
 
-// CHANGE: One-click Demo Login (auto-creates demo account if not in DB yet)
 module.exports.demoLogin = async (req, res, next) => {
     try {
-        let demoUser = await User.findOne({ username: "demo_guest" });
+        const demoUsername = "demo_guest";
+        const demoEmail = "demo.guest@wanderlust.app";
+
+        let demoUser = await User.findOne({
+            $or: [{ username: demoUsername }, { email: demoEmail }],
+        });
+
         if (!demoUser) {
-            const newDemo = new User({
-                username: "demo_recruiter",
-                email: "demo@wanderlust.app",
+            const newDemoUser = new User({
+                email: demoEmail,
+                username: demoUsername,
             });
-            demoUser = await User.register(newDemo, "WanderlustDemo@2026");
+            demoUser = await User.register(newDemoUser, "WanderlustDemo#2026");
         }
+
         req.login(demoUser, (err) => {
             if (err) {
+                console.error("Demo req.login error:", err);
                 return next(err);
             }
-            req.flash(
-                "success",
-                "Logged in as demo_guest! Try creating a listing, editing your post, or leaving a review."
-            );
-            let redirectUrl = res.locals.redirectUrl || "/listings";
-            return res.redirect(redirectUrl);
+            req.flash("success", "Welcome! Signed in with the demo guest account.");
+            return req.session.save((saveErr) => {
+                if (saveErr) {
+                    console.error("Demo session save error:", saveErr);
+                    return next(saveErr);
+                }
+                res.redirect("/listings");
+            });
         });
-    } catch (err) {
+    } catch (e) {
+        console.error("Demo login error:", e);
         req.flash("error", "Demo login failed. Please try signing up.");
-        return res.redirect("/login");
+        res.redirect("/login");
     }
 };
 
